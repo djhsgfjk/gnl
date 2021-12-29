@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/gnl.dir/main.c.obj"
-  "gnl.exe"
-  "gnl.exe.manifest"
-  "gnl.lib"
+  "CMakeFiles/gnl.dir/main.c.o"
+  "gnl"
   "gnl.pdb"
 )
 
