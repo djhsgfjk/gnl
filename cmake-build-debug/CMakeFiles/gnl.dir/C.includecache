@@ -6,7 +6,17 @@
 
 #IncludeRegexTransform: 
 
+/Users/gsheev/Desktop/gnl/get_next_line.h
+unistd.h
+-
+stdlib.h
+-
+
 /Users/gsheev/Desktop/gnl/main.c
 stdio.h
+-
+get_next_line.h
+/Users/gsheev/Desktop/gnl/get_next_line.h
+fcntl.h
 -
 

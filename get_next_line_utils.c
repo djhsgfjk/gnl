@@ -6,7 +6,7 @@
 /*   By: gsheev <gsheev@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 12:16:03 by gsheev            #+#    #+#             */
-/*   Updated: 2021/12/30 15:09:12 by gsheev           ###   ########.fr       */
+/*   Updated: 2021/12/30 17:26:11 by gsheev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_piece	*ft_create_piece_elem(char *s, int len)
 
 void	ft_piece_clear(t_piece *piece)
 {
+	if (piece == (void *)0)
+		return ;
 	free(piece->s);
 	free(piece);
 }
@@ -42,6 +44,8 @@ void	ft_line_clear(t_line *line)
 {
 	if (line != (void *)0 && line->next != (void *)0)
 		ft_line_clear(line->next);
+	if (line == (void *)0)
+		return ;
 	ft_piece_clear(line->piece);
 	free(line);
 }

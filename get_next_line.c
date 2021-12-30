@@ -6,7 +6,7 @@
 /*   By: gsheev <gsheev@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 12:15:59 by gsheev            #+#    #+#             */
-/*   Updated: 2021/12/30 15:11:42 by gsheev           ###   ########.fr       */
+/*   Updated: 2021/12/30 18:06:30 by gsheev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ static t_piece	*ft_get_piece_of_line(t_piece *buff)
 	char	*s;
 	t_piece *piece;
 
+	if (buff == (void *)0 || buff->len == 0 || buff->s == (void *)0)
+		return (ft_create_piece_elem((void *)0, 0));
 	i = 1;
-	while (i < buff->len && buff->s[i-1] != '\n')
+	while (i < buff->len && (buff->s)[i-1] != '\n')
 		i++;
 	len = i;
 	s = (char *)malloc(len * sizeof(char));
@@ -61,7 +63,9 @@ static t_line	*ft_read_line(int fd)
 	static t_piece	*buff;
 	t_piece	*piece;
 	t_line	*line;
-
+	
+	if (buff == (void *)0)
+		buff = ft_create_piece_elem((void *)0, 0);
 	line = (void *) 0;
 	line = ft_create_line_elem(ft_get_piece_of_line(buff));
 	if (line->piece->len > 0)
@@ -84,24 +88,34 @@ static t_line	*ft_read_line(int fd)
 	return (line);
 }
 
-static void ft_str_add(char **s1, char *s2, int len1, int len2)
+static char	*ft_line_concatenate(t_line	*p, int len)
 {
 	int		i;
+	int 	j;
+	char	*s;
 
-	if (*s1 == (void *)0 || s2 == (void *)0)
-		return ;
-	i = len1;
-	while (i < len1 + len2)
+	s = (char *)malloc(len * sizeof(char));
+	if (s == (void *)0)
+		return (s);
+	i = 0;
+	while (p != (void *)0)
 	{
-		(*s1)[i] = s2[i - len1];
-		i++;
+		j = 0;
+		while (j < p->piece->len)
+		{
+			s[i] = p->piece->s[j];
+			i++;
+			j++;
+		}
+		p = p->next;
 	}
+	return (s);
 }
 
 char	*get_next_line(int fd)
 {
 	t_line			*line;
-	t_line			**p;
+	t_line			*p;
 	char			*s;
 	int 			len;
 
@@ -109,19 +123,13 @@ char	*get_next_line(int fd)
 	if (line == (void *)0)
 		return ((char *)0);
 	len = 0;
-	p = &line;
-	while (*p != (void *)0)
+	p = line;
+	while (p != (void *)0)
 	{
-		len += (*p)->piece->len;
-		(*p) = (*p)->next;
+		len += p->piece->len;
+		p = p->next;
 	}
-	s = (char *)malloc(len * sizeof(char));
-	p = &line;
-	while (*p != (void *)0)
-	{
-		ft_str_add(&s, (*p)->piece->s, len, (*p)->piece->len);
-		(*p) = (*p)->next;
-	}
+	s = ft_line_concatenate(line, len);
 	ft_line_clear(line);
 	return (s);
 }
